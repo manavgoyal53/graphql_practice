@@ -18,8 +18,10 @@ const {BookInputType,BookType} = require("../types");
         type: new GraphQLList(BookType),
         resolve: async (parent, args, context, resolveInfo) => {
             return await Book.find().populate('author').exec().then(res=>{
-              res.forEach(async element => {
+              res.forEach(element => {
+              console.log(element)
                 element.author = element.author.name
+                
               });
               return res
             })
@@ -54,7 +56,8 @@ const {BookInputType,BookType} = require("../types");
   });
   const bookSchema = new GraphQLSchema({
     query: BookQueryType,
-    mutation: BookMutationType
+    mutation: BookMutationType,
+    types: [BookInputType,BookType]
   });
   
   // Export the types and mutations

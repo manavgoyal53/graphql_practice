@@ -1,7 +1,7 @@
 // authMiddleware.js
 
 const jwt = require('jsonwebtoken');
-const { secret } = require('./config'); // Your secret key for JWT
+const { jwtSecret } = require('./config'); // Your secret key for JWT
 
 // Middleware function to authenticate requests
 const authMiddleware = (req, res, next) => {
@@ -18,7 +18,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   // Verify the token
-  jwt.verify(token, secret, (err, decoded) => {
+  jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: 'Failed to authenticate token' });
     }

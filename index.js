@@ -6,6 +6,7 @@ const { connectDB } = require('./connectDB');
 
 
 const app = express();
+app.use(authMiddleware);
 
 // Mount the GraphQL endpoint
 // app.all('/graphql', createHandler({ schema }));
@@ -16,7 +17,6 @@ app.use('/graphql', graphqlHTTP({
   }));
 
 
-app.use(authMiddleware);
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
