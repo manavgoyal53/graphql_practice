@@ -1,12 +1,11 @@
 const express = require('express');
-const {schema} = require('./src/query/index');
+const {schema,user_schema} = require('./src/query/index');
 const {graphqlHTTP} = require('express-graphql');
 const {authMiddleware} = require("./src/authMiddleware");
 const { connectDB } = require('./connectDB');
 
 
 const app = express();
-app.use(authMiddleware);
 
 // Mount the GraphQL endpoint
 // app.all('/graphql', createHandler({ schema }));
@@ -14,7 +13,14 @@ app.use(authMiddleware);
 app.use('/graphql', graphqlHTTP({
     schema: schema,
     graphiql: false // Enable GraphiQL for easy testing
-  }));
+  }),authMiddleware);
+
+
+const loginSignUphandler = graphqlHTTP({
+  schema: user_schema,
+  graphiql: false // Enable GraphiQL for easy testing
+})
+app.use('/login_signup', loginSignUphandler);
 
 
 // Start the server

@@ -2,6 +2,7 @@ const {
     GraphQLObjectType,
     GraphQLNonNull,
     GraphQLSchema,
+    GraphQLList
   } = require('graphql');
 
 const { User } = require('../models');
@@ -23,9 +24,9 @@ const UserMutationType = new GraphQLObjectType({
           // Resolve logic to add a new book
           // For simplicity, we'll return the input data
           let userDetails = args.user
-          return await User.insertMany(userDetails).then(res=>{
-            delete res[0].password;
-            return res[0]
+          return await User.create(userDetails).then((res)=>{
+            delete res.password;
+            return res
           }).catch(err=>{
             throw new Error(err)
           })
@@ -41,10 +42,9 @@ const UserMutationType = new GraphQLObjectType({
           // Resolve logic to add a new author
           // For simplicity, we'll return the input data
             const user = await User.findOne({ username: args.user.username });
-
             // Check if user exists and password is correct
             if (!user || !user.comparePassword(args.user.password)) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return { message: 'Invalid username or password' };
             }
 
             // Generate JWT token
@@ -57,7 +57,20 @@ const UserMutationType = new GraphQLObjectType({
     })
   });
 
+  const UserQueryType = new GraphQLObjectType({
+    name: 'Query',
+    fields: {
+      users: {
+        type: new GraphQLList(UserType),
+        resolve: async (parent, args, context, resolveInfo) => {
+            return new UserType(await User.find().exec())
+            }
+      },
+    }
+  });
+
   const userSchema = new GraphQLSchema({
-    mutation: UserMutationType
+    mutation: UserMutationType,
+    query: UserQueryType
   });
   module.exports = { userSchema };

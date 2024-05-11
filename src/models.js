@@ -27,6 +27,12 @@ const Author = mongoose.model('Author', authorSchema);
 
 const bcrypt = require('bcrypt');
 
+const permissionSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: { type: String }
+  // Other fields as needed
+});
+
 // Define the schema for the user model
 const userSchema = new mongoose.Schema({
   username: {
@@ -37,7 +43,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permission' }]
 });
 
 // Hash the password before saving the user
@@ -63,9 +70,16 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   }
 };
 
+userSchema.methods.hasPermission = function(permissionName) {
+  return this.populate('permissions').execPopulate().then(user => {
+    // Check if the user has the permission with the specified name
+    return user.permissions.some(permission => permission.name === permissionName);
+  });
+};
+
 // Create the User model
 const User = mongoose.model('User', userSchema);
 
-
+const Permission = mongoose.model('Permission', permissionSchema);
 
 module.exports = {Book,Author,User}

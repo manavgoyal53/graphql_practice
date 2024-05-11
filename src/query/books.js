@@ -6,7 +6,7 @@ const {
   } = require('graphql');
 
 const { Book } = require('../models');
-const {BookInputType,BookType} = require("../types");
+const {BookInputType,BookType,BookIdType} = require("../types");
   
   // Define the Book type
   
@@ -17,11 +17,11 @@ const {BookInputType,BookType} = require("../types");
       books: {
         type: new GraphQLList(BookType),
         resolve: async (parent, args, context, resolveInfo) => {
+          console.log(resolveInfo.fieldNodes[0].selectionSet.selections[2].directives);
             return await Book.find().populate('author').exec().then(res=>{
+              console.log(res)
               res.forEach(element => {
-              console.log(element)
                 element.author = element.author.name
-                
               });
               return res
             })
@@ -52,6 +52,18 @@ const {BookInputType,BookType} = require("../types");
           })
         }
       },
+      deleteBook:{
+        type: BookType,
+        args: {
+          book: {type: BookIdType}
+        },
+        resolve: async (parents,args,context,resolveinfo)=>{
+          return await Book.deleteOne(args.book).exec().then(res=>{
+            console.log(res)
+            return res
+          })
+        }
+      }
     })
   });
   const bookSchema = new GraphQLSchema({

@@ -6,10 +6,9 @@ const { jwtSecret } = require('./config'); // Your secret key for JWT
 // Middleware function to authenticate requests
 const authMiddleware = (req, res, next) => {
   // Get the token from the request headers
-  if(req.originalUrl.includes("login") || req.originalUrl.includes("signUp")){
+  if(req.originalUrl.includes("/login_signup")){
     next();
   }
-  
   const token = req.headers['authorization'];
 
   // Check if token is provided

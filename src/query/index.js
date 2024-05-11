@@ -6,11 +6,15 @@ const { authorSchema } = require('./authors');
 const schema = mergeSchemas({
     schemas: [
       bookSchema,
-      userSchema,
       authorSchema
       // Add other schemas here
     ]
   });
-
-  module.exports = {schema}
+  const user_schema = mergeSchemas({
+    schemas: [
+      userSchema
+      // Add other schemas here
+    ]
+  });
+  module.exports = {schema,user_schema}
   
