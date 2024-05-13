@@ -2,11 +2,13 @@ const { mergeSchemas } = require('@graphql-tools/schema')
 const { bookSchema } = require('./books');
 const { userSchema } = require('./users');
 const { authorSchema } = require('./authors');
+const { bookIssueSchema } = require("./bookIssue")
 
 const schema = mergeSchemas({
     schemas: [
       bookSchema,
-      authorSchema
+      authorSchema,
+      bookIssueSchema
       // Add other schemas here
     ]
   });

@@ -63,7 +63,7 @@ const UserMutationType = new GraphQLObjectType({
       users: {
         type: new GraphQLList(UserType),
         resolve: async (parent, args, context, resolveInfo) => {
-            return new UserType(await User.find().exec())
+            return await User.find().exec()
             }
       },
     }

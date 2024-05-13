@@ -77,9 +77,20 @@ userSchema.methods.hasPermission = function(permissionName) {
   });
 };
 
+const bookIssuanceSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user who issued the book
+  book: { type: mongoose.Schema.Types.ObjectId, ref: 'Book', required: true }, // Reference to the book being issued
+  issueDate: { type: Date, default: Date.now }, // Date when the book was issued
+  returnDate: { type: Date } // Date when the book is expected to be returned
+  // Other fields as needed
+});
+
+// Create the book issuance model
+const BookIssuance = mongoose.model('BookIssuance', bookIssuanceSchema);
+
 // Create the User model
 const User = mongoose.model('User', userSchema);
 
 const Permission = mongoose.model('Permission', permissionSchema);
 
-module.exports = {Book,Author,User}
+module.exports = {Book,Author,User,BookIssuance}

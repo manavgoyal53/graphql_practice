@@ -37,8 +37,8 @@ const BookType = new GraphQLObjectType({
       genre: { type: GraphQLString }
     })
   });
-  const BookIdType = new GraphQLInputObjectType({
-    name: 'BookId',
+  const IdType = new GraphQLInputObjectType({
+    name: 'Id',
     fields: () => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
     })
@@ -74,4 +74,22 @@ const BookType = new GraphQLObjectType({
     })
   })
 
-  module.exports = {BookType,BookInputType,AuthorInputType,AuthorType,UserType,UserInputType,TokenType,BookIdType}
+  const BookIssueType = new GraphQLObjectType({
+    name: "BookIssue",
+    fields: ()=>({
+      book: { type: GraphQLString },
+      user: { type: GraphQLString },
+      returnDate: { type: GraphQLString },
+      issueDate: { type: GraphQLString }
+    })
+  })
+
+  const BookIssueInputType = new GraphQLInputObjectType({
+    name: "BookIssueInput",
+    fields: ()=>({
+      book: { type: GraphQLString },
+      user: { type: GraphQLString },
+    })
+  })
+
+  module.exports = {BookType,BookInputType,AuthorInputType,AuthorType,UserType,UserInputType,TokenType,IdType,BookIssueType,BookIssueInputType}

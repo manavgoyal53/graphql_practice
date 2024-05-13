@@ -6,7 +6,7 @@ const {
   } = require('graphql');
 
 const { Book } = require('../models');
-const {BookInputType,BookType,BookIdType} = require("../types");
+const {BookInputType,BookType,IdType} = require("../types");
   
   // Define the Book type
   
@@ -55,10 +55,10 @@ const {BookInputType,BookType,BookIdType} = require("../types");
       deleteBook:{
         type: BookType,
         args: {
-          book: {type: BookIdType}
+          book: {type: IdType}
         },
         resolve: async (parents,args,context,resolveinfo)=>{
-          return await Book.deleteOne(args.book).exec().then(res=>{
+          return await Book.findByIdAndDelete(args.book.id).exec().then(res=>{
             console.log(res)
             return res
           })
