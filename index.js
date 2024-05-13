@@ -10,10 +10,10 @@ const app = express();
 // Mount the GraphQL endpoint
 // app.all('/graphql', createHandler({ schema }));
 
-app.use('/graphql', graphqlHTTP({
+app.use('/graphql', authMiddleware, graphqlHTTP({
     schema: schema,
     graphiql: false // Enable GraphiQL for easy testing
-  }),authMiddleware);
+  }));
 
 
 const loginSignUphandler = graphqlHTTP({
